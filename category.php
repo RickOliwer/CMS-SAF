@@ -1,45 +1,55 @@
-<?php 
-
+<?php
 get_header();
-
 ?>
 
-    <h1>Hello, world! & Category</h1>
+<div class="container">
 
-    <hr />
+	<pre>category.php</pre>
 
-    <!-- do we have any posts to display? -->
-    <?php if(have_posts()) : ?>
-        <!-- heh we have posts to display -->
-        <?php while(have_posts()) : ?>
+	<h1>Category: <?php single_cat_title(); ?></h1>
 
-            <?php 
-                the_post(); 
-            ?>
-            <article class="card">
-                
-                <div class="card-body">
-                    
-                    <h2 class="card-title">
-                        <a href="<?php the_permalink(); ?>">
-                        <?php the_title(); ?>
-                        </a>
-                    </h2>
-                    <div class="card-meta text-muted small mb-2">
-                        post published <?php the_date(); ?> by <?php the_author(); ?> in <?php the_category(', '); ?>
-                    </div>
-                    
+	<hr />
 
-                    <p class="card-text">
-                        <?php the_excerpt(); ?>
-                    </p>
-                
-                </div>
-            
-            </article>
-        <?php endwhile ; ?>
-    <?php endif ; ?>
+	<div class="row">
+		<div class="col-md-9">
+			<!-- Do we have any posts to display? -->
+			<?php if (have_posts()) : ?>
+				<!-- Yay, we has posts do display! -->
+				<?php while (have_posts()) : ?>
+					<!-- Start post -->
+					<?php
+						// Load next post to display
+						the_post();
+					?>
+					<article class="card mb-4">
+						<div class="card-body">
+							<h2 class="card-title h4">
+								<a href="<?php the_permalink(); ?>">
+									<?php the_title(); ?>
+								</a>
+							</h2>
+							<div class="card-meta text-muted small mb-2">
+								Post published <?php echo get_the_date(); ?> at <?php the_time(); ?> by <?php the_author(); ?> in <?php the_category(', '); ?>
+							</div>
 
-<?php 
+							<div class="card-text">
+								<?php the_excerpt(); ?>
+							</div>
+						</div>
+					</article>
+					<!-- End post -->
+				<?php endwhile; ?>
+			<?php else: ?>
+				<p>Sorry, no posts found.</p>
+			<?php endif; ?>
+		</div><!-- /.col-md-9 -->
 
+		<div class="col-md-3">
+			<?php get_sidebar(); ?>
+		</div><!-- /.col-md-3 -->
+
+	</div><!-- /.row -->
+</div><!-- /.container -->
+
+<?php
 get_footer();
