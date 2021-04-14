@@ -1,5 +1,12 @@
 <?php
 
+require_once('includes/Bootstrap_5_WP_Nav_Menu_Walker.php');
+
+/**
+ * Declare support for title-tag.
+ */
+add_theme_support('title-tag');
+
 /**
  * Change length of auto-generated excerpt.
  *
@@ -34,26 +41,30 @@ function mbt_filter_the_excerpt($excerpt) {
 add_filter('the_excerpt', 'mbt_filter_the_excerpt');
 
 /**
- * Declare support for 'title-tag'
+ * Register navigation menus.
  */
-add_theme_support('title-tag');
+function mbt_register_nav_menus() {
+	// register theme menu locations
+	register_nav_menus([
+		'header-menu' => 'Header Menu',
+	]);
+}
+add_action('init', 'mbt_register_nav_menus');
 
 /**
- * register widfet areas (a.k.a sidebars).
- * 
+ * Register widget areas (a.k.a. sidebars).
+ *
  * @return void
  */
-
-function mbt_widgets_init(){
-    register_sidebar([
-        'name' => 'Blog sidebar',
-        'id' => 'blog-sidebar',
-        'description' => '',
-        'before_widget' => '<aside id="%1$s" class="card mb-3 widget %2$s">',
-        'after_widget' => '</aside>',
-        'before_title' => '<h3 class="widget-title h5">',
-        'after_title' => '</h3>',
-    ]);
+function mbt_widgets_init() {
+	register_sidebar([
+		'name' => 'Blog Sidebar',
+		'id' => 'blog-sidebar',
+		'description' => 'Sidebar on blog index, category archive and single blog posts.',
+		'before_widget' => '<div id="%1$s" class="card mb-3 widget %2$s"><div class="card-body">',
+		'after_widget' => '</div></div>',
+		'before_title' => '<h3 class="widget-title h5">',
+		'after_title' => '</h3>',
+	]);
 }
-
 add_action('widgets_init', 'mbt_widgets_init');
