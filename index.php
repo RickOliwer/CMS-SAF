@@ -43,7 +43,7 @@ get_header();
 		</div><!-- /.col-md-9 -->
 
 		<div class="col-md-3">
-			<?php get_sidebar(); ?>
+			<?php get_sidebar('primary'); ?>
 		</div><!-- /.col-md-3 -->
 
 	</div><!-- /.row -->

@@ -1,3 +1,10 @@
+    
+    <div class="container">
+      <div class="row align-items-start">
+        <?php get_sidebar('secondary'); ?>
+      </div>
+		</div>
+    
     </main>
 
     <!-- Bootstrap Bundle with Popper -->

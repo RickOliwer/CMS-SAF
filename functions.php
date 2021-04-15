@@ -9,10 +9,14 @@ add_theme_support('title-tag');
 
 function mbt_register_scripts_and_styles(){
 
-
+	//bootstrap 5
 	wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css', [], '5.0.0-beta3', 'all');
 
+	//theme style
 	wp_enqueue_style('mbt', get_parent_theme_file_uri('style.css'), ['bootstrap'], '0.1', 'all');
+
+	//print styles
+	wp_enqueue_style('mbt-print', get_parent_theme_file_uri('print.css'), ['bootstrap'], '0.1', 'print');
 }
 add_action('wp_enqueue_scripts', 'mbt_register_scripts_and_styles');
 
@@ -71,6 +75,16 @@ function mbt_widgets_init() {
 		'id' => 'blog-sidebar',
 		'description' => 'Sidebar on blog index, category archive and single blog posts.',
 		'before_widget' => '<div id="%1$s" class="card mb-3 widget %2$s"><div class="card-body">',
+		'after_widget' => '</div></div>',
+		'before_title' => '<h3 class="widget-title h5">',
+		'after_title' => '</h3>',
+	]);
+
+	register_sidebar([
+		'name' => 'Footer',
+		'id' => 'footer',
+		'description' => 'This sidebar is for the footer',
+		'before_widget' => '<div id="%1$s" class="col card m-2 widget %2$s"><div class="card-body">',
 		'after_widget' => '</div></div>',
 		'before_title' => '<h3 class="widget-title h5">',
 		'after_title' => '</h3>',
