@@ -17,6 +17,11 @@ function mbt_register_scripts_and_styles(){
 
 	//print styles
 	wp_enqueue_style('mbt-print', get_parent_theme_file_uri('print.css'), ['bootstrap'], '0.1', 'print');
+
+	//javascript
+	wp_enqueue_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf', [], '5.0.0-beta3', true);
+
+	wp_enqueue_script('mbt', get_parent_theme_file_uri('assets/js/app.js'), ['bootstrap'], '0.1', true);
 }
 add_action('wp_enqueue_scripts', 'mbt_register_scripts_and_styles');
 
@@ -84,8 +89,8 @@ function mbt_widgets_init() {
 		'name' => 'Footer',
 		'id' => 'footer',
 		'description' => 'This sidebar is for the footer',
-		'before_widget' => '<div id="%1$s" class="col card m-2 widget %2$s"><div class="card-body">',
-		'after_widget' => '</div></div>',
+		'before_widget' => '<div id="%1$s" class="col  m-2 widget %2$s">',
+		'after_widget' => '</div>',
 		'before_title' => '<h3 class="widget-title h5">',
 		'after_title' => '</h3>',
 	]);
