@@ -7,6 +7,8 @@ require_once('includes/Bootstrap_5_WP_Nav_Menu_Walker.php');
  */
 add_theme_support('title-tag');
 
+add_theme_support( 'post-thumbnails' );
+
 function mbt_register_scripts_and_styles(){
 
 	//bootstrap 5
@@ -32,7 +34,7 @@ add_action('wp_enqueue_scripts', 'mbt_register_scripts_and_styles');
  * @return int
  */
 function mybasictheme_excerpt_length($length) {
-	return 10;
+	return 7;
 }
 add_filter('excerpt_length', 'mybasictheme_excerpt_length', 10, 1);
 
