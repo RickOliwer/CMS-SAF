@@ -30,7 +30,7 @@ get_header();
 		<p>Sorry, no post found.</p>
 	<?php endif; ?>
 
-	</main>
+</main>
 
 <?php
 get_footer();
