@@ -1,4 +1,4 @@
-<article class="card mb-4">
+<article class="card card-scroll mb-4">
 
 	<?php if (has_post_thumbnail()) : ?>
 		<div class="row g-0">

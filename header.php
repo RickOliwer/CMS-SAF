@@ -15,9 +15,12 @@
 				<?php bloginfo('name'); ?>
 			</a>
 
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+			<div class="burger navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+
+			</div>
 
 			<?php
 				// output the menu set for theme location `header-menu`

@@ -24,3 +24,41 @@ a{
 a:hover{
     text-decoration: #212529;
 }
+
+.card-scroll{
+    width: 100%;
+    opacity: 0;
+    margin-top: 50px;
+    transform: translateY(50px);
+    transition: 0.8s all ease-in-out;
+}
+.card-appear{
+    opacity: 1;
+    transform: translateY(0px);
+}
+
+.burger{
+    /* display: none; */
+    cursor: pointer;
+}
+
+.burger div{
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 5px;
+    transition: all 0.5s ease;
+}
+
+.toggle .line1{
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.toggle .line2{
+    opacity: 0;
+}
+
+.toggle .line3{
+    transform: rotate(45deg) translate(-5px, -6px);
+    
+}
