@@ -62,3 +62,10 @@ a:hover{
     transform: rotate(45deg) translate(-5px, -6px);
     
 }
+
+/* article .row > div,
+article .row {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+} */

@@ -2,7 +2,7 @@
 get_header();
 ?>
 
-<div class="container">
+<main class="container">
 
 	<pre>single.php</pre>
 
@@ -37,12 +37,12 @@ get_header();
 			<?php endif; ?>
 		</div><!-- /.col-md-9 -->
 
-		<div class="col-md-3">
+		<aside class="col-md-3">
 			<?php get_sidebar('primary'); ?>
-		</div><!-- /.col-md-3 -->
+		</aside><!-- /.col-md-3 -->
 
 	</div><!-- /.row -->
-</div><!-- /.container -->
+</main><!-- /.container -->
 
 <?php
 get_footer();
