@@ -75,6 +75,29 @@ function mbt_filter_the_excerpt($excerpt) {
 add_filter('the_excerpt', 'mbt_filter_the_excerpt');
 
 /**
+ * filter content from bad words
+ *
+ * @param string $content
+ * @return string
+ */
+function mbt_filter_bad_words($content){
+	$bad_words = ['hello', 'it', 'me'];
+	$censored_words = [];
+
+	foreach($bad_words  as $bad_word){
+		$len = strlen($bad_word);
+		$censored_word = str_repeat('*', $len);
+		array_push($censored_words, $censored_word);
+	}
+	
+	return str_ireplace($bad_word, $censored_word, $content);
+}
+
+add_filter('the_content', 'mbt_filter_bad_words');
+add_filter('the_excerpt', 'mbt_filter_bad_words');
+add_filter('the_title', 'mbt_filter_bad_words');
+
+/**
  * Register navigation menus.
  */
 function mbt_register_nav_menus() {
