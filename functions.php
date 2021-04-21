@@ -93,9 +93,9 @@ function mbt_filter_bad_words($content){
 	return str_ireplace($bad_word, $censored_word, $content);
 }
 
-add_filter('the_content', 'mbt_filter_bad_words');
-add_filter('the_excerpt', 'mbt_filter_bad_words');
-add_filter('the_title', 'mbt_filter_bad_words');
+// add_filter('the_content', 'mbt_filter_bad_words');
+// add_filter('the_excerpt', 'mbt_filter_bad_words');
+// add_filter('the_title', 'mbt_filter_bad_words');
 
 /**
  * Register navigation menus.
