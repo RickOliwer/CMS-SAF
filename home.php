@@ -3,8 +3,10 @@ get_header();
 ?>
 
 <main class="container mt-3">
-	
-	<pre>index.php</pre>
+
+	<h1>Blogg Home</h1>
+
+	<pre>home.php</pre>
 
 	<hr />
 

@@ -1,10 +1,13 @@
 <?php
+/*
+ * Template Name: Page with Right Sidebar
+ */
 get_header();
 ?>
 
-<main class="container mt-3">
-	
-	<pre>index.php</pre>
+<main class="container">
+
+	<pre>page-templates/sidebar-right.php</pre>
 
 	<hr />
 
@@ -18,21 +21,21 @@ get_header();
 					<?php
 						// Load next post to display
 						the_post();
-						get_template_part('template-parts/content', 'excerpt');
+						get_template_part('template-parts/content', 'page'); // template-parts/content-page.php
 					?>
 					<!-- End post -->
 				<?php endwhile; ?>
 			<?php else: ?>
-				<p>Sorry, no posts found.</p>
+				<p>Sorry, page not found.</p>
 			<?php endif; ?>
 		</div><!-- /.col-md-9 -->
 
 		<aside class="col-md-3 sidebar">
-			<?php get_sidebar('primary'); ?>
+			<?php get_sidebar('page'); ?>
 		</aside><!-- /.col-md-3 -->
 
 	</div><!-- /.row -->
-</main><!-- /.container -->
+</main>
 
 <?php
 get_footer();

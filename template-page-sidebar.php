@@ -1,9 +1,14 @@
 <?php
+/*
+ * Template Name: page with right sidebar
+ */
 get_header();
 ?>
 
 <main class="container mt-3">
-	
+
+	<h1>Blogg</h1>
+
 	<pre>index.php</pre>
 
 	<hr />
@@ -18,7 +23,7 @@ get_header();
 					<?php
 						// Load next post to display
 						the_post();
-						get_template_part('template-parts/content', 'excerpt');
+						get_template_part('template-parts/content', 'page');
 					?>
 					<!-- End post -->
 				<?php endwhile; ?>
@@ -28,7 +33,7 @@ get_header();
 		</div><!-- /.col-md-9 -->
 
 		<aside class="col-md-3 sidebar">
-			<?php get_sidebar('primary'); ?>
+			<?php get_sidebar('page'); ?>
 		</aside><!-- /.col-md-3 -->
 
 	</div><!-- /.row -->

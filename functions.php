@@ -7,7 +7,15 @@ require_once('includes/Bootstrap_5_WP_Nav_Menu_Walker.php');
  */
 add_theme_support('title-tag');
 
-add_theme_support( 'post-thumbnails' );
+/**
+ * Declare support for post-thumbnails.
+ */
+add_theme_support('post-thumbnails');
+
+/**
+ * Declare our own image size for archives
+ */
+add_image_size('featured-image-thumb', 520, 9999);
 
 function mbt_register_scripts_and_styles(){
 	/**
@@ -102,5 +110,16 @@ function mbt_widgets_init() {
 		'before_title' => '<h3 class="widget-title h5">',
 		'after_title' => '</h3>',
 	]);
+
+	register_sidebar([
+		'name' => 'Page Sidebar',
+		'id' => 'page-sidebar',
+		'description' => 'This sidebar is for the page',
+		'before_widget' => '<div id="%1$s" class="col  m-2 widget %2$s">',
+		'after_widget' => '</div>',
+		'before_title' => '<h3 class="widget-title h5">',
+		'after_title' => '</h3>',
+	]);
+
 }
 add_action('widgets_init', 'mbt_widgets_init');
