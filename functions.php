@@ -2,20 +2,84 @@
 
 require_once('includes/Bootstrap_5_WP_Nav_Menu_Walker.php');
 
-/**
- * Declare support for title-tag.
- */
-add_theme_support('title-tag');
+function mbt_theme_setup(){
+	/**
+	 * Declare support for title-tag.
+	 */
+	add_theme_support('title-tag');
+	
+	/**
+	 * Declare support for post-thumbnails.
+	 */
+	add_theme_support('post-thumbnails');
+	
+	/**
+	 * Declare our costume theme logo
+	 */
+	add_theme_support('custom-logo', [
+		'height'		=> 50,
+		'width'			=> 100,
+
+	]);
+
+	/**
+	 * Declare our costume theme header
+	 */
+	add_theme_support('custom-header', [
+		'header-text'	=> true,
+        'width'			=> 2560, //2k
+		'height'		=> 500, // 5:1
+		'flex-width'	=> true,
+        'flex-height'	=> true,
+	]);
+	/**
+	 * Declare our own image size for archives
+	 */
+	add_image_size('featured-image-thumb', 520, 9999);
+
+
+}
+add_action('after_setup_theme', 'mbt_theme_setup');
 
 /**
- * Declare support for post-thumbnails.
+ * Undocumented function
+ *
+ * @param WP_Customize_Manger $wp_customizer
+ * @return void
  */
-add_theme_support('post-thumbnails');
+function mbt_customizer($wp_customizer){
+	$wp_customizer->add_setting('header_textcolor', [
+		'default' => '#333333',
+	]);
+
+	$wp_customizer->add_setting('header_textshadow_color', [
+		'default' => '#dddddd',
+		''
+	]);
+	$wp_customizer->add_control('mbt_header_textshadow_color', [
+		'lable' => 'header Textshadow Color',
+		'settings' => ''
+	]);
+}
+
+add_action('customize_register', 'mbt_customizer');
 
 /**
- * Declare our own image size for archives
+ * Output if custom logo isset else bloginfor('name').
+ *
+ * @return void
  */
-add_image_size('featured-image-thumb', 520, 9999);
+function mbt_navbar_brand(){
+	$custom_logo_id = get_theme_mod('custom_logo');
+	$logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+
+	if($logo){
+		echo '<img src="' . esc_url( $logo[0] ) . '" alt="' . get_bloginfo( 'name' ) . '">';
+	} else {
+		echo get_bloginfo('name');
+	}
+}
+
 
 function mbt_register_scripts_and_styles(){
 	/**

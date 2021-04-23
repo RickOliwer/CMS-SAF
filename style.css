@@ -10,6 +10,11 @@ License: WTFPL
 License URI: http://www.wtfpl.net/
 Text Domain: mybasictheme
 */
+
+#site-header img{
+    min-height: 20vh;
+    object-fit: cover;
+}
 .text-justify {
 	text-align: justify;
 }
