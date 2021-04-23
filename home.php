@@ -3,9 +3,9 @@ get_header();
 ?>
 
 <main class="container mt-3">
-
+	<?php if(!get_header_image()) : ?>
 	<h1>Blogg Home</h1>
-
+	<?php endif ; ?>
 	<pre>home.php</pre>
 
 	<hr />

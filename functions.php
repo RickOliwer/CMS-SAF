@@ -2,86 +2,151 @@
 
 require_once('includes/Bootstrap_5_WP_Nav_Menu_Walker.php');
 
-function mbt_theme_setup(){
+/**
+ * Setup theme.
+ *
+ * @return void
+ */
+function mbt_theme_setup() {
+
 	/**
 	 * Declare support for title-tag.
 	 */
 	add_theme_support('title-tag');
-	
+
 	/**
 	 * Declare support for post-thumbnails.
 	 */
 	add_theme_support('post-thumbnails');
-	
+
 	/**
-	 * Declare our costume theme logo
+	 * Declare support for custom logo.
 	 */
 	add_theme_support('custom-logo', [
-		'height'		=> 50,
-		'width'			=> 100,
-
+		'height' => 50,
+		'width' => 200,
 	]);
 
 	/**
-	 * Declare our costume theme header
+	 * Declare support for custom header image.
 	 */
 	add_theme_support('custom-header', [
-		'header-text'	=> true,
-        'width'			=> 2560, //2k
-		'height'		=> 500, // 5:1
-		'flex-width'	=> true,
-        'flex-height'	=> true,
+		// Display the header text along with the image
+		'header-text' => true,
+
+		// Header image width (in pixels)
+		'width' => 2560,
+
+		// Header image height (in pixels)
+		'height' => 500,
+
+		// Allow flexible image width
+		'flex-width' => true,
+
+		// Allow flexible image height
+		'flex-height' => true,
 	]);
+
 	/**
 	 * Declare our own image size for archives
 	 */
 	add_image_size('featured-image-thumb', 520, 9999);
 
-
 }
 add_action('after_setup_theme', 'mbt_theme_setup');
 
 /**
- * Undocumented function
+ * Register theme modifications in WP Customizer
  *
- * @param WP_Customize_Manger $wp_customizer
+ * @param WP_Customize_Manager $wp_customizer
  * @return void
  */
-function mbt_customizer($wp_customizer){
+function mbt_customizer($wp_customizer) {
+	// Header Textcolor
 	$wp_customizer->add_setting('header_textcolor', [
-		'default' => '#333333',
+		'default' => '#222222',
 	]);
 
+	// Header Textshadow Color
 	$wp_customizer->add_setting('header_textshadow_color', [
 		'default' => '#dddddd',
-		''
 	]);
-	$wp_customizer->add_control('mbt_header_textshadow_color', [
-		'lable' => 'header Textshadow Color',
-		'settings' => ''
+	$wp_customizer->add_control(
+		new WP_Customize_Color_Control(
+			$wp_customizer,
+			'header_textshadow_color',
+			[
+				'label' => 'Header Textshadow Color',			// Admin-visible name of the control
+				'setting' => 'header_textshadow_color',			// Which setting to load and manipulate
+				'section' => 'colors', 							// ID of the section this control should render in
+				'sanitize_callback' => 'sanitize_hex_color',	// Sanitize HEX color
+			]
+		)
+	);
+
+	// Blog Section
+	$wp_customizer->add_section('mbt_blog', [
+		'title' => 'Blog Settings',
+		'priority' => 30,
+	]);
+
+	// Blog sidebar
+	$wp_customizer->add_setting('blog_sidebar', [
+		'default' => 'right',
+	]);
+	$wp_customizer->add_control('blog_sidebar', [
+		'label' => 'Blog Sidebar Location',
+		'description' => 'This applies to devices ≥768px.',
+		'setting' => 'blog_sidebar',
+		'section' => 'mbt_blog',
+		'type' => 'radio',
+		'choices' => [
+			'left' => 'Left',
+			'right' => 'Right',
+		],
 	]);
 }
-
 add_action('customize_register', 'mbt_customizer');
 
 /**
- * Output if custom logo isset else bloginfor('name').
+ * Output neccessary CSS for our theme modifications in WP Customizer.
  *
  * @return void
  */
-function mbt_navbar_brand(){
+function mbt_wp_head_customizer_css() {
+	?>
+		<style>
+			#site-header .header-text-wrapper {
+				color: #<?php echo get_theme_mod('header_textcolor'); ?>;
+				text-shadow: 0px 0px 4px <?php echo get_theme_mod('header_textshadow_color'); ?>;
+			}
+		</style>
+	<?php
+}
+add_action('wp_head', 'mbt_wp_head_customizer_css');
+
+/**
+ * Output custom logo (if set, otherwise output site title).
+ *
+ * @return void
+ */
+function mbt_navbar_brand() {
 	$custom_logo_id = get_theme_mod('custom_logo');
 	$logo = wp_get_attachment_image_src($custom_logo_id, 'full');
 
-	if($logo){
-		echo '<img src="' . esc_url( $logo[0] ) . '" alt="' . get_bloginfo( 'name' ) . '">';
+	if ($logo) {
+		echo '<img src="' . esc_url($logo[0]) . '" alt="' . get_bloginfo('name') . '">';
 	} else {
 		echo get_bloginfo('name');
 	}
 }
 
-
-function mbt_register_scripts_and_styles(){
+/**
+ * Register neccessary scripts and styles.
+ *
+ * @return void
+ */
+function mbt_register_scripts_and_styles() {
 	/**
 	 * Styles
 	 */
@@ -112,7 +177,7 @@ add_action('wp_enqueue_scripts', 'mbt_register_scripts_and_styles');
  * @return int
  */
 function mybasictheme_excerpt_length($length) {
-	return 7;
+	return 10;
 }
 add_filter('excerpt_length', 'mybasictheme_excerpt_length', 10, 1);
 
@@ -139,27 +204,28 @@ function mbt_filter_the_excerpt($excerpt) {
 add_filter('the_excerpt', 'mbt_filter_the_excerpt');
 
 /**
- * filter content from bad words
+ * Filters content from bad words and replaces them with asterisk.
  *
- * @param string $content
- * @return string
+ * @param string $content The content to be filtered
+ * @return string The filtered content
  */
-function mbt_filter_bad_words($content){
-	$bad_words = ['hello', 'it', 'me'];
+function mbt_filter_bad_words($content) {
+	$bad_words_raw = file_get_contents(get_parent_theme_file_path('includes/bad_words.txt'));
+	$bad_words_raw = trim($bad_words_raw);
+	$bad_words = explode("\n", $bad_words_raw);
 	$censored_words = [];
 
-	foreach($bad_words  as $bad_word){
+	foreach ($bad_words as $bad_word) {
 		$len = strlen($bad_word);
 		$censored_word = str_repeat('*', $len);
 		array_push($censored_words, $censored_word);
 	}
-	
-	return str_ireplace($bad_word, $censored_word, $content);
-}
 
-// add_filter('the_content', 'mbt_filter_bad_words');
-// add_filter('the_excerpt', 'mbt_filter_bad_words');
-// add_filter('the_title', 'mbt_filter_bad_words');
+	return str_ireplace($bad_words, $censored_words, $content);
+}
+add_filter('the_content', 'mbt_filter_bad_words');
+add_filter('the_excerpt', 'mbt_filter_bad_words');
+add_filter('the_title', 'mbt_filter_bad_words');
 
 /**
  * Register navigation menus.
@@ -178,6 +244,7 @@ add_action('init', 'mbt_register_nav_menus');
  * @return void
  */
 function mbt_widgets_init() {
+	// Blog widget area
 	register_sidebar([
 		'name' => 'Blog Sidebar',
 		'id' => 'blog-sidebar',
@@ -188,25 +255,26 @@ function mbt_widgets_init() {
 		'after_title' => '</h3>',
 	]);
 
-	register_sidebar([
-		'name' => 'Footer',
-		'id' => 'footer',
-		'description' => 'This sidebar is for the footer',
-		'before_widget' => '<div id="%1$s" class="col  m-2 widget %2$s">',
-		'after_widget' => '</div>',
-		'before_title' => '<h3 class="widget-title h5">',
-		'after_title' => '</h3>',
-	]);
-
+	// Page widget area
 	register_sidebar([
 		'name' => 'Page Sidebar',
 		'id' => 'page-sidebar',
-		'description' => 'This sidebar is for the page',
-		'before_widget' => '<div id="%1$s" class="col  m-2 widget %2$s">',
-		'after_widget' => '</div>',
+		'description' => 'Sidebar on pages.',
+		'before_widget' => '<div id="%1$s" class="card mb-3 widget %2$s"><div class="card-body">',
+		'after_widget' => '</div></div>',
 		'before_title' => '<h3 class="widget-title h5">',
 		'after_title' => '</h3>',
 	]);
 
+	// Footer widget area
+	register_sidebar([
+		'name' => 'Footer',
+		'id' => 'footer',
+		'description' => 'Page Footer 📄🦶🏻.',
+		'before_widget' => '<div id="%1$s" class="text-justify col widget %2$s">',
+		'after_widget' => '</div>',
+		'before_title' => '<h3 class="widget-title h5">',
+		'after_title' => '</h3>',
+	]);
 }
 add_action('widgets_init', 'mbt_widgets_init');
