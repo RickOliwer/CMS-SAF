@@ -65,10 +65,27 @@ add_action('after_setup_theme', 'mbt_theme_setup');
  */
 function mbt_customizer($wp_customizer) {
 	// Header Textcolor
-	$wp_customizer->add_setting('header_textcolor', [
-		'default' => '#222222',
+	// $wp_customizer->add_setting('header_textcolor', [
+	// 	'default' => '#222222',
+	// ]);
+	
+	// Use Header textshadow?
+	$wp_customizer->add_setting('header_textshadow', [
+		'default' => false,
 	]);
+	$wp_customizer->add_control(
+		new WP_Customize_Control(
+			$wp_customizer,
+			'header_textshadow',
+			[
+				'label' => 'Header Textshadow',
+				'setting' => 'header_textshadow',
+				'section' => 'colors',
+				'type' => 'checkbox',
+			]
 
+		)
+	);
 	// Header Textshadow Color
 	$wp_customizer->add_setting('header_textshadow_color', [
 		'default' => '#dddddd',
@@ -82,6 +99,66 @@ function mbt_customizer($wp_customizer) {
 				'setting' => 'header_textshadow_color',			// Which setting to load and manipulate
 				'section' => 'colors', 							// ID of the section this control should render in
 				'sanitize_callback' => 'sanitize_hex_color',	// Sanitize HEX color
+			]
+		)
+	);
+
+	//header textshadow offset-x
+	$wp_customizer->add_setting('header_textshadow_offset_x', [
+		'default' => '0',
+	]);
+	$wp_customizer->add_control(
+		new WP_Customize_Control(
+			$wp_customizer,
+			'header_textshadow_offset_x',
+			[
+				'label' => 'Header Textshadow Offset X',		// Admin-visible name of the control
+				'description' => 'Offset in pixels',			// Admin-visible description of the control
+				'setting' => 'header_textshadow_offset_x',		// Which setting to load and manipulate
+				'section' => 'colors', 							// ID of the section this control should render in
+				'sanitize_callback' => 'mbt_sanitize_int',		// Sanitize integer
+				'type' => 'number',
+			]
+		)
+	);
+
+	// Header Textshadow offset-y
+	$wp_customizer->add_setting('header_textshadow_offset_y', [
+		'default' => '0',
+	]);
+	$wp_customizer->add_control(
+		new WP_Customize_Control(
+			$wp_customizer,
+			'header_textshadow_offset_y',
+			[
+				'label' => 'Header Textshadow Offset Y',		// Admin-visible name of the control
+				'description' => 'Offset in pixels',			// Admin-visible description of the control
+				'setting' => 'header_textshadow_offset_y',		// Which setting to load and manipulate
+				'section' => 'colors', 							// ID of the section this control should render in
+				'sanitize_callback' => 'mbt_sanitize_int',		// Sanitize integer
+				'type' => 'number',
+			]
+		)
+	);
+
+	// Header Textshadow blur-radius
+	$wp_customizer->add_setting('header_textshadow_blur_radius', [
+		'default' => '0',
+	]);
+	$wp_customizer->add_control(
+		new WP_Customize_Control(
+			$wp_customizer,
+			'header_textshadow_blur_radius',
+			[
+				'label' => 'Header Textshadow Blur Radius',		// Admin-visible name of the control
+				'description' => 'Blur radius in pixels',		// Admin-visible description of the control
+				'setting' => 'header_textshadow_blur_radius',	// Which setting to load and manipulate
+				'section' => 'colors', 							// ID of the section this control should render in
+				'sanitize_callback' => 'mbt_sanitize_int',		// Sanitize integer
+				'type' => 'number',
+				'input_attrs' => [
+					'min' => '0',
+				],
 			]
 		)
 	);
@@ -111,19 +188,41 @@ function mbt_customizer($wp_customizer) {
 add_action('customize_register', 'mbt_customizer');
 
 /**
+ * Sanitizes an integer.
+ *
+ * @param mixed $input
+ * @return int
+ */
+function mbt_sanitize_int($input) {
+	return filter_var($input, FILTER_SANITIZE_NUMBER_INT);
+}
+
+/**
  * Output neccessary CSS for our theme modifications in WP Customizer.
  *
  * @return void
  */
 function mbt_wp_head_customizer_css() {
-	?>
-		<style>
-			#site-header .header-text-wrapper {
-				color: #<?php echo get_theme_mod('header_textcolor'); ?>;
-				text-shadow: 0px 0px 4px <?php echo get_theme_mod('header_textshadow_color'); ?>;
-			}
-		</style>
-	<?php
+	$styles = [];
+
+	$header_textcolor = get_theme_mod('header_textcolor');
+	array_push($styles, "#site-header .header-text-wrapper {
+		color: #{$header_textcolor};
+	}");
+
+	if (get_theme_mod('header_textshadow')) {
+		$header_textshadow = sprintf(
+			"%dpx %dpx %dpx %s",
+			get_theme_mod('header_textshadow_offset_x'),
+			get_theme_mod('header_textshadow_offset_y'),
+			get_theme_mod('header_textshadow_blur_radius'),
+			get_theme_mod('header_textshadow_color')
+		);
+		array_push($styles, "#site-header .header-text-wrapper {
+			text-shadow: {$header_textshadow};
+		}");
+	}
+	printf("<style>%s</style>", implode("\n", $styles));
 }
 add_action('wp_head', 'mbt_wp_head_customizer_css');
 
