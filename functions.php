@@ -1,6 +1,8 @@
 <?php
 
 require_once('includes/Bootstrap_5_WP_Nav_Menu_Walker.php');
+require_once('includes/bs5-pagination.php');
+require_once('includes/bootscore-pagination.php');
 
 /**
  * Setup theme.
@@ -226,6 +228,15 @@ function mbt_filter_bad_words($content) {
 add_filter('the_content', 'mbt_filter_bad_words');
 add_filter('the_excerpt', 'mbt_filter_bad_words');
 add_filter('the_title', 'mbt_filter_bad_words');
+
+/**
+ * add class to next/previous posts link
+ *
+ * @return string;
+ */
+function mbt_filter_pagination_links(){
+
+}
 
 /**
  * Register navigation menus.
