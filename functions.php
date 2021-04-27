@@ -242,6 +242,37 @@ function mbt_navbar_brand() {
 	}
 }
 
+function mbt_post_meta($display = true) {
+	$post_meta = sprintf(
+		"Post published %s at %s by %s",
+		get_the_date(),
+		get_the_time(),
+		get_the_author()
+	);
+
+	if (has_category()) {
+		$post_meta = sprintf(
+			"%s in %s",
+			$post_meta,
+			get_the_category_list(', ')
+		);
+	}
+
+	if (has_tag()) {
+		$post_meta = sprintf(
+			"%s with tags %s",
+			$post_meta,
+			get_the_tag_list('', ', ')
+		);
+	}
+
+	if ($display) {
+		echo $post_meta;
+	} else {
+		return $post_meta;
+	}
+}
+
 /**
  * Register neccessary scripts and styles.
  *
@@ -334,8 +365,21 @@ add_filter('the_title', 'mbt_filter_bad_words');
  * @return string;
  */
 function mbt_filter_pagination_links(){
-
+	return 'class="btn btn-secondary"';
 }
+add_filter('next_posts_link_attributes', 'mbt_filter_pagination_links', 10, 0);
+add_filter('previous_posts_link_attributes', 'mbt_filter_pagination_links', 10, 0);
+
+/**
+ * Add class to next/previous post links
+ *
+ * @return string;
+ */
+function mbt_filter_post_nav_link($link) {
+	return str_replace('<a href=', '<a class="page-link" href=', $link);
+}
+add_filter('previous_post_link', 'mbt_filter_post_nav_link', 10, 1);
+add_filter('next_post_link', 'mbt_filter_post_nav_link', 10, 1);
 
 /**
  * Register navigation menus.
@@ -347,6 +391,26 @@ function mbt_register_nav_menus() {
 	]);
 }
 add_action('init', 'mbt_register_nav_menus');
+
+/**
+ * Register Custom Post Type.
+ */
+function mbt_register_cpt() {
+	// FAQ 
+	register_post_type('mbt_faq', [
+		'labels' => [
+			'name' => 'FAQs',
+			'singular_name' => 'FAQ',
+		],
+		'public' => true,
+		'has_archive' => true,
+		'supports' => ['title', 'editor', 'excerpt', 'thumbnail', 'author'],
+		'rewrite' => [
+			'slug' => 'faq',
+		]
+	]);
+}
+add_action('init', 'mbt_register_cpt');
 
 /**
  * Register widget areas (a.k.a. sidebars).
