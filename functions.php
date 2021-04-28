@@ -428,7 +428,16 @@ function mbt_widgets_init() {
 		'before_title' => '<h3 class="widget-title h5">',
 		'after_title' => '</h3>',
 	]);
-
+	// Movie review widget area
+	register_sidebar([
+		'name' => 'Movie Review Sidebar',
+		'id' => 'movie-review-sidebar',
+		'description' => 'Sidebar on movie review index, category archive and single blog posts.',
+		'before_widget' => '<div id="%1$s" class="card mb-3 widget %2$s"><div class="card-body">',
+		'after_widget' => '</div></div>',
+		'before_title' => '<h3 class="widget-title h5">',
+		'after_title' => '</h3>',
+	]);
 	// Page widget area
 	register_sidebar([
 		'name' => 'Page Sidebar',
